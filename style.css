@@ -1,0 +1,284 @@
+/* style.css (完整優化版 - v2.2.7 - 加入頁尾聯絡資訊樣式) */
+
+/* --- 基本重置與字體設定 --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    line-height: 1.6; color: #343a40; background-color: #f8f9fa;
+    margin: 0 auto; padding: 20px; max-width: 1600px;
+    position: relative;
+    transition: padding-right 0.3s ease-in-out;
+}
+
+/* --- 主內容區域樣式 --- */
+#main-content {
+    max-width: 100%;
+    transition: max-width 0.3s ease-in-out, margin-right 0.3s ease-in-out;
+}
+
+/* --- 進度指示器樣式 (使用 right 定位) --- */
+#progress-indicator {
+    width: 250px;
+    background-color: #f1f3f5;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 900;
+    position: fixed;
+    top: 80px;
+    right: 20px; /* 顯示時的位置 */
+    transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 側邊欄隱藏時的樣式 */
+body:not(.sidebar-visible) #progress-indicator {
+    right: -270px; /* 滑出畫面 */
+    opacity: 0;
+    pointer-events: none; /* 側邊欄本身不可交互 */
+}
+
+/* 側邊欄隱藏時，調整主內容寬度 (僅大螢幕) */
+@media (min-width: 992px) {
+    body.sidebar-visible #main-content {
+         max-width: calc(100% - 270px);
+         margin-right: 270px;
+    }
+    body:not(.sidebar-visible) #main-content {
+         max-width: 100%;
+         margin-right: 0;
+    }
+    body {
+        padding-right: 20px;
+    }
+}
+
+
+/* --- 側邊欄切換按鈕樣式 (提高 z-index) --- */
+#toggle-sidebar-button {
+    position: fixed;
+    top: 85px;
+    right: 275px; /* 側邊欄顯示時 */
+    width: 35px;
+    height: 35px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: -2px 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease, right 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    z-index: 9999; /* 確保在最上層 */
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#toggle-sidebar-button:hover {
+    background-color: #0b5ed7;
+}
+
+/* 側邊欄隱藏時，調整切換按鈕位置 */
+body:not(.sidebar-visible) #toggle-sidebar-button {
+    right: 0px;
+}
+
+/* 圖示方向邏輯 (保持不變) */
+body.sidebar-visible #toggle-sidebar-button i {
+    transform: rotate(0deg);
+}
+body:not(.sidebar-visible) #toggle-sidebar-button i {
+    transform: rotate(180deg);
+}
+
+
+/* --- (進度指示器內部樣式 - 無需修改) --- */
+#progress-indicator h3, #progress-indicator h4 { margin-top: 0; margin-bottom: 10px; color: #495057; }
+#progress-indicator h4 { font-size: 0.95em; margin-top: 15px; border-top: 1px solid #e0e0e0; padding-top: 10px; }
+#overall-progress-container label { display: block; font-size: 0.9em; margin-bottom: 3px; font-weight: 500; }
+#overall-progress-container progress { width: 100%; height: 12px; margin-bottom: 3px; appearance: none; }
+#overall-progress-container progress::-webkit-progress-bar { background-color: #e9ecef; border-radius: 6px; }
+#overall-progress-container progress::-webkit-progress-value { background-color: #0d6efd; border-radius: 6px; transition: width 0.3s ease; }
+#overall-progress-container progress::-moz-progress-bar { background-color: #0d6efd; border-radius: 6px; transition: width 0.3s ease; }
+#overall-progress-container span { font-size: 0.85em; color: #6c757d; display: block; text-align: right; }
+#area-progress-list { list-style: none; padding: 0; max-height: 300px; overflow-y: auto; font-size: 0.85em; }
+#area-progress-list li { margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+#area-progress-list .area-name { flex-basis: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 5px; display: inline-block; color: inherit; cursor: default; }
+#area-progress-list .area-progress-value { font-weight: 500; color: #343a40; flex-shrink: 0; }
+.save-status { margin-top: 15px; padding-top: 10px; border-top: 1px solid #e0e0e0; font-size: 0.8em; color: #6c757d; text-align: center; }
+#last-saved-time { font-weight: bold; color: #198754; }
+.unsaved-indicator { color: #ffc107; font-weight: bold; margin-left: 8px; font-size: 0.9em; }
+
+/* --- (H1-H4, 問卷控制項, 問卷區域, 折疊樣式, 按鈕組, 提示, 結果區域等樣式 - 無需修改) --- */
+h1, h2, h3, h4 { margin-bottom: 0.75em; font-weight: 600; }
+h1 { text-align: center; font-size: clamp(1.8em, 5vw, 2.4em); color: #0d6efd; border-bottom: 3px solid #0d6efd; padding-bottom: 15px; margin-bottom: 1.5em; width: 100%; }
+h2 { font-size: clamp(1.5em, 4vw, 1.8em); color: #343a40; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; margin-top: 2em; }
+h3 { font-size: clamp(1.2em, 3vw, 1.4em); color: #0dcaf0; margin-top: 1.8em; }
+h4 { font-size: 1.1em; color: #dc3545; margin-bottom: 10px; }
+#non-compliant-items h4 { color: #dc3545; margin-bottom: 15px; }
+.questionnaire-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 10px; background-color: #e9ecef; border-radius: 6px; flex-wrap: wrap; }
+#question-search-input { flex-grow: 1; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 4px; font-size: 0.95em; min-width: 200px; }
+#question-search-input:focus { outline: none; border-color: #86b7fe; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); }
+.questionnaire-controls button { padding: 6px 12px; font-size: 0.9em; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.2s ease; display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.questionnaire-controls button:hover { background-color: #5c636a; }
+.questionnaire-controls button i { font-size: 0.9em; }
+#questionnaire { margin-bottom: 30px; }
+.risk-area { background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 30px; padding: 0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-out; position: relative; }
+.risk-area:hover { box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08); }
+.risk-area h2 { margin: 0; padding: 15px 25px; padding-right: 40px; font-size: 1.5em; color: #495057; border-bottom: 1px solid #e9ecef; cursor: pointer; position: relative; user-select: none; transition: background-color 0.1s ease; }
+.risk-area h2:hover { background-color: rgba(13, 110, 253, 0.05); }
+.risk-area h2::after { font-family: "Font Awesome 6 Free"; font-weight: 900; content: "\f077"; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 0.8em; color: #6c757d; transition: transform 0.2s ease-in-out; }
+.risk-area.collapsed h2::after { content: "\f078"; }
+.risk-area.collapsed h2 { border-bottom-color: transparent; }
+.area-items-container { padding: 25px; padding-top: 15px; overflow: hidden; transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, margin 0.3s ease-in-out; max-height: 5000px; opacity: 1; }
+.risk-area.collapsed .area-items-container { max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; border-top: none; }
+.assessment-item { margin-bottom: 20px; padding: 15px 10px 15px 10px; border-bottom: 1px dashed #e9ecef; transition: border-left 0.3s ease-in-out, background-color 0.3s ease; border-left: 4px solid transparent; margin-left: -4px; border-radius: 4px; }
+.assessment-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 5px; }
+.assessment-item p { margin: 0 0 12px 0; font-weight: 500; color: #212529; font-size: 1.05em; }
+.assessment-item label { margin-right: 25px; cursor: pointer; display: inline-block; margin-bottom: 8px; color: #495057; transition: color 0.2s ease; font-size: 0.95em; padding: 3px 0; }
+.assessment-item label:hover { color: #0d6efd; }
+.assessment-item input[type="radio"] { margin-right: 8px; cursor: pointer; accent-color: #0d6efd; vertical-align: -1px; transform: scale(1.1); }
+.assessment-item.item-non-compliant { background-color: #fdf3f4 !important; border-left-color: #dc3545 !important; }
+.item-needs-answer-flash { transition: background-color 0.2s ease-in-out !important; background-color: #fff3cd !important; }
+.assessment-item.hidden-by-search, .risk-area.hidden-by-search { display: none !important; }
+.button-group { text-align: center; margin: 30px 0; padding-bottom: 25px; border-bottom: 1px solid #dee2e6; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+.button-group button { padding: 10px 20px; font-size: 1em; font-weight: 500; color: #fff; border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.25s ease, box-shadow 0.2s ease, transform 0.1s ease, opacity 0.2s ease; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); flex-grow: 0; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+.button-group button:hover:not(:disabled) { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); transform: translateY(-2px); }
+.button-group button:active:not(:disabled) { transform: translateY(0px); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+.button-group button:disabled { opacity: 0.65; cursor: not-allowed; transform: none; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+#save-button { background-color: #198754; } #save-button:hover:not(:disabled) { background-color: #157347; }
+#calculate-button { background-color: #0d6efd; } #calculate-button:hover:not(:disabled) { background-color: #0b5ed7; }
+#export-csv-button { background-color: #6c757d; } #export-csv-button:hover:not(:disabled) { background-color: #5c636a; }
+#import-csv-button { background-color: #fd7e14; } #import-csv-button:hover:not(:disabled) { background-color: #e66f0e; }
+#clear-button.danger { background-color: #dc3545; } #clear-button.danger:hover:not(:disabled) { background-color: #bb2d3b; }
+.loader { border: 3px solid rgba(255, 255, 255, 0.3); border-top: 3px solid #ffffff; border-radius: 50%; width: 1em; height: 1em; animation: spin 1s linear infinite; display: inline-block; margin-left: 8px; vertical-align: middle; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+#notification-area { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 25px; border-radius: 6px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); color: #fff; font-weight: 500; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s; max-width: 90%; text-align: center; }
+#notification-area.visible { opacity: 1; visibility: visible; transition: opacity 0.4s ease-in-out, visibility 0s linear 0s; }
+#notification-area.success { background-color: #198754; }
+#notification-area.error { background-color: #dc3545; }
+#notification-area.warning { background-color: #ffc107; color: #343a40; }
+#notification-area.info { background-color: #0dcaf0; }
+#results { background-color: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; padding: 30px; margin-top: 30px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); }
+#results h2 { text-align: center; color: #0d6efd; border-bottom: 2px solid #0d6efd; padding-bottom: 15px; margin-bottom: 30px; }
+#overall-summary { margin-bottom: 40px; padding-bottom: 25px; border-bottom: 1px dashed #dee2e6; }
+#overall-summary h3 { text-align: center; color: #495057; margin-bottom: 20px; font-size: 1.3em; }
+.score-display { font-size: 1.4em; font-weight: 700; color: #0d6efd; text-align: center; margin-bottom: 20px; padding: 15px; background-color: #e7f0ff; border-radius: 6px; border: 1px solid #b3d7ff; }
+
+/* --- Chart Containers --- */
+.chart-container { position: relative; margin: 25px auto; padding: 15px; border: 1px solid #e9ecef; background-color: #f8f9fa; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); border-radius: 6px; display: flex; justify-content: center; align-items: center; min-height: 60px; text-align: center; color: #6c757d; overflow: hidden; }
+.overall-chart-container { height: 350px; width: 95%; max-width: 500px; min-height: 350px; }
+.radar-chart-container { height: 400px; width: 95%; max-width: 600px; min-height: 400px; margin-top: 30px; }
+#area-details .chart-container { height: 280px; width: 95%; max-width: 380px; min-height: 280px; }
+.chart-container canvas { display: block; max-width: 100%; max-height: 100%; }
+
+/* --- (Area Results, Non-Compliant Items - 無需修改) --- */
+.area-result-item { border-bottom: 1px dashed #dee2e6; padding: 25px 0; margin-bottom: 25px; }
+.area-result-item:last-child { border-bottom: none; padding-bottom: 10px; }
+.area-result-item p.area-score-text { text-align: center; font-weight: 600; margin-bottom: 15px; font-size: 1.15em; color: #343a40; }
+#non-compliant-items { margin-top: 30px; padding: 20px; background-color: #fff0f1; border: 1px solid #ffd5d8; border-radius: 6px; transition: background-color 0.3s ease; }
+#non-compliant-items ul { list-style-position: inside; padding-left: 0; margin-top: 15px; }
+#non-compliant-items li { margin-bottom: 10px; color: #495057; font-size: 0.95em; line-height: 1.5; padding: 3px 0; }
+#non-compliant-items li a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
+#non-compliant-items li a:hover { color: #0d6efd; text-decoration: underline; }
+#non-compliant-items li strong { color: #5c636a; margin-right: 5px; }
+#non-compliant-items .filter-controls { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+#non-compliant-items .filter-controls label { font-weight: 500; color: #495057; font-size: 0.95em; flex-shrink: 0; }
+#non-compliant-items .filter-controls select { padding: 5px 8px; border: 1px solid #ced4da; border-radius: 4px; font-size: 0.9em; background-color: #fff; cursor: pointer; flex-grow: 1; max-width: 300px; }
+
+/* --- Footer / Disclaimer / Contact --- */
+footer {
+    margin-top: 40px; /* 與上方內容的間距 */
+    padding-top: 20px; /* 頂部內邊距 */
+    border-top: 1px solid #dee2e6; /* 頂部分隔線 */
+    text-align: center; /* 文字居中 */
+}
+
+footer .disclaimer, footer .contact-info { /* 同時套用基本樣式 */
+    font-size: 0.85em; /* 稍小的字體 */
+    color: #6c757d; /* 灰色文字 */
+    line-height: 1.5; /* 調整行高 */
+    max-width: 900px; /* 限制最大寬度，避免在大螢幕上過寬 */
+    margin-left: auto; /* 與 max-width 結合實現區塊居中 */
+    margin-right: auto;
+    padding: 0 15px; /* 左右留點空間，避免貼邊 */
+}
+
+footer .contact-info {
+    margin-top: 15px; /* 與上方 disclaimer 的間距 */
+    color: #495057; /* 讓聯絡資訊稍微深色一點 */
+}
+
+footer .contact-info strong {
+    color: #343a40; /* 強調文字顏色深一點 */
+}
+
+footer .contact-info a {
+    color: #0d6efd; /* 連結顏色 */
+    text-decoration: none;
+}
+footer .contact-info a:hover {
+    text-decoration: underline;
+}
+
+/* --- 響應式設計 --- */
+@media (max-width: 991px) { /* 中等螢幕及以下 */
+    #main-content { max-width: 100%; margin-right: 0; }
+    #progress-indicator { position: static; width: 100%; margin-bottom: 20px; order: -1; right: auto; opacity: 1 !important; pointer-events: auto !important; }
+    #toggle-sidebar-button { display: none; }
+    body { padding-right: 20px; }
+    .risk-area { padding: 0; }
+    .risk-area h2 { padding: 12px 20px; padding-right: 35px; font-size: 1.4em; }
+    .area-items-container { padding: 20px; padding-top: 10px; }
+}
+
+@media (max-width: 768px) { /* 平板 */
+    body { padding: 10px; }
+    h1 { font-size: 1.8em; }
+    .risk-area h2 { padding: 10px 15px; padding-right: 30px; font-size: 1.3em; }
+    .area-items-container { padding: 15px; padding-top: 10px; }
+    .assessment-item p { font-size: 1em; }
+    .button-group { gap: 10px; }
+    .button-group button { padding: 10px 18px; font-size: 0.95em; }
+    .overall-chart-container { height: 300px; max-width: 95%; min-height: 300px;}
+    .radar-chart-container { height: 350px; min-height: 350px; }
+    #area-details .chart-container { height: 250px; max-width: 95%; min-height: 250px;}
+    #results { padding: 20px; }
+    #area-progress-list { max-height: 200px; }
+    .questionnaire-controls { padding: 8px; }
+    #question-search-input { padding: 6px 10px; }
+    .questionnaire-controls button { padding: 5px 10px; }
+    footer .disclaimer, footer .contact-info { font-size: 0.8em; }
+}
+
+@media (max-width: 480px) { /* 手機 */
+    body { padding: 10px 5px; }
+    h1 { font-size: 1.6em; margin-bottom: 1em; }
+    h2 { font-size: 1.4em; }
+    h3 { font-size: 1.2em; }
+    .risk-area h2 { padding: 10px 10px; padding-right: 25px; font-size: 1.2em; }
+    .area-items-container { padding: 10px; padding-top: 5px; }
+    .assessment-item { padding: 10px 4px; margin-left: 0; margin-right: 0; }
+    .assessment-item p { margin-bottom: 8px; }
+    .assessment-item label { display: block; margin-right: 0; margin-bottom: 10px; }
+    .button-group { flex-direction: column; align-items: stretch; gap: 10px; }
+    .button-group button { width: 100%; max-width: none; }
+    .overall-chart-container { height: 260px; min-height: 260px; }
+    .radar-chart-container { height: 300px; min-height: 300px; }
+    #area-details .chart-container { height: 220px; min-height: 220px; }
+    #results { padding: 15px; }
+    #non-compliant-items { padding: 15px; }
+    #non-compliant-items .filter-controls { flex-direction: column; align-items: stretch; }
+    #non-compliant-items .filter-controls select { max-width: none; }
+    .questionnaire-controls { flex-direction: column; align-items: stretch; }
+    #question-search-input { min-width: auto; }
+    footer { margin-top: 30px; padding-top: 15px; }
+    footer hr { margin: 10px auto; } /* 調整分隔線邊距 */
+    footer .disclaimer, footer .contact-info { font-size: 0.75em; padding: 0 10px; }
+    footer .contact-info { margin-top: 10px; } /* 調整聯絡資訊上邊距 */
+}

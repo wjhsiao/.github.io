@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個資保護準備度評估儀表板 (含圖表) - v2.2.7 (頁尾聯絡資訊)</title> <!-- 更新版本號和標題 -->
+    <!-- 引入 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入自訂樣式 -->
+    <link rel="stylesheet" href="style.css">
+    <!-- 引入 Font Awesome (用於圖示) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="sidebar-visible"> <!-- 用於控制側邊欄顯示 -->
+
+    <!-- *** 側邊欄切換按鈕 *** -->
+    <button id="toggle-sidebar-button" title="切換側邊欄顯示">
+        <i class="fa-solid fa-angles-right"></i>
+    </button>
+    <!-- ************************* -->
+
+    <h1>個資保護準備度評估儀表板</h1>
+
+    <!-- ===== 進度指示器 ===== -->
+    <div id="progress-indicator" class="progress-sidebar">
+        <h3>評估進度</h3>
+        <div id="overall-progress-container">
+            <label for="overall-progress-bar">整體進度:</label>
+            <progress id="overall-progress-bar" value="0" max="100"></progress>
+            <span id="overall-progress-text">0 / 0</span>
+        </div>
+        <h4>各領域進度:</h4>
+        <ul id="area-progress-list">
+            <li>載入中...</li>
+        </ul>
+        <div class="save-status">
+             最後暫存時間: <span id="last-saved-time">尚未暫存</span>
+             <span id="unsaved-changes-indicator" class="unsaved-indicator" style="display: none;"> (有未儲存的變更)</span>
+         </div>
+    </div>
+    <!-- ======================== -->
+
+    <!-- ===== 主內容容器 ===== -->
+    <div id="main-content">
+
+        <!-- ===== 提示訊息區域 ===== -->
+        <div id="notification-area" aria-live="assertive"></div>
+        <!-- ======================== -->
+
+        <p>請針對以下各項評估細項，勾選最符合現況的選項。</p>
+
+        <!-- 問卷搜尋與控制項 -->
+        <div class="questionnaire-controls">
+            <input type="search" id="question-search-input" placeholder="搜尋問題關鍵字或題號...">
+            <button id="expand-all-button" title="展開所有領域"><i class="fa-solid fa-plus"></i> 全部展開</button>
+            <button id="collapse-all-button" title="收合所有領域"><i class="fa-solid fa-minus"></i> 全部收合</button>
+        </div>
+        <!-- ------------------- -->
+
+        <div id="questionnaire">
+            <p>正在載入問卷題目...</p>
+        </div>
+
+        <!-- ===== 按鈕組 ===== -->
+        <div class="button-group">
+            <button id="save-button">暫存目前答案</button>
+            <button id="calculate-button">
+                <span class="button-text">計算分數與檢視結果</span>
+                <span id="loading-indicator" class="loader" style="display: none;"></span>
+            </button>
+            <button id="export-csv-button">匯出結果 (CSV)</button>
+            <input type="file" id="import-csv-input" accept=".csv" style="display: none;">
+            <button id="import-csv-button">匯入結果 (CSV)</button>
+            <button id="clear-button" class="danger">清除所有暫存答案</button>
+        </div>
+        <!-- =================== -->
+
+        <!-- ===== 結果顯示區域 ===== -->
+        <div id="results" style="display: none;">
+            <h2>評估結果</h2>
+
+            <!-- 整體摘要區域 -->
+            <div id="overall-summary">
+                <h3>整體摘要</h3>
+                <div id="overall-score" class="score-display"></div>
+                <div class="chart-container overall-chart-container">
+                     <canvas id="overall-chart"></canvas>
+                 </div>
+                 <div class="chart-container radar-chart-container">
+                    <canvas id="all-areas-radar-chart"></canvas>
+                 </div>
+            </div>
+
+            <!-- 各風險領域詳細資訊 -->
+            <h3>各風險領域分數與分佈</h3>
+            <div id="area-details">
+                <!-- 各領域的分數和獨立圓餅圖會由 JS 動態插入此處 -->
+            </div>
+
+            <!-- 待改進項目 -->
+            <h3>待改進項目 (未符合)</h3>
+            <div id="non-compliant-items">
+                <!-- 篩選控件 和 列表標題/內容 會由 JS 動態插入 -->
+            </div>
+        </div>
+        <!-- ======================== -->
+
+    </div> <!-- End of #main-content -->
+
+    <!-- ===== 免責聲明與聯絡資訊區域 ===== -->
+    <footer>
+        <p class="disclaimer">
+            <strong>免責聲明：</strong> 本評估工具僅供初步自我評估參考，其結果不構成任何形式的法律或專業建議。 本工具不會主動蒐集、儲存或傳輸您的任何可識別個人身份資訊至伺服器。 您的評估答案僅暫存於您自己的瀏覽器本機儲存空間中 (localStorage)，不會上傳。 請使用者自行確保評估結果的適當應用與資訊安全。
+        </p>
+        <hr style="max-width: 600px; margin: 15px auto; border-top: 1px solid #e0e0e0;"> <!-- 分隔線 -->
+        <p class="contact-info">
+            <strong>評估工具提供與諮詢：</strong> 鼎昊管理顧問有限公司 <br>
+            <strong>聯繫窗口：</strong> 蘇宣 專案經理 <br>
+            <strong>Email：</strong> <a href="mailto:yashasu@dinghaomcc.com">yashasu@dinghaomcc.com</a>
+            <!-- 若有網站可取消註解: <br><a href="https://www.dinghaomcc.com/" target="_blank">公司網站</a> -->
+        </p>
+    </footer>
+    <!-- ======================================= -->
+
+    <!-- 引入問卷數據和主要邏輯腳本 -->
+    <script src="assessmentData.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
