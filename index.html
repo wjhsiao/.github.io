@@ -1,9 +1,11 @@
+<!-- --- START OF FILE index.html --- -->
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個資保護準備度評估儀表板 (含圖表) - v2.2.7 (頁尾聯絡資訊)</title> <!-- 更新版本號和標題 -->
+    <title>個資保護準備度評估儀表板 (含圖表/分頁) - v2.3.0</title> <!-- 更新版本號和標題 -->
     <!-- 引入 Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- 引入自訂樣式 -->
@@ -15,7 +17,9 @@
 
     <!-- *** 側邊欄切換按鈕 *** -->
     <button id="toggle-sidebar-button" title="切換側邊欄顯示">
-        <i class="fa-solid fa-angles-right"></i>
+        <!-- JS 會根據 body class 控制顯示哪個圖示 -->
+        <i class="fa-solid fa-angles-left"></i>
+        <i class="fa-solid fa-angles-right" style="display: none;"></i>
     </button>
     <!-- ************************* -->
 
@@ -47,15 +51,25 @@
         <div id="notification-area" aria-live="assertive"></div>
         <!-- ======================== -->
 
-        <p>請針對以下各項評估細項，勾選最符合現況的選項。</p>
+        <p>請針對目前顯示領域的各項評估細項，勾選最符合現況的選項。點擊 <i class="fas fa-question-circle" style="color:#6c757d;font-size:0.9em;"></i> 圖示可查看說明。</p>
 
         <!-- 問卷搜尋與控制項 -->
         <div class="questionnaire-controls">
             <input type="search" id="question-search-input" placeholder="搜尋問題關鍵字或題號...">
-            <button id="expand-all-button" title="展開所有領域"><i class="fa-solid fa-plus"></i> 全部展開</button>
-            <button id="collapse-all-button" title="收合所有領域"><i class="fa-solid fa-minus"></i> 全部收合</button>
+            <button id="expand-all-button" title="展開目前領域"><i class="fa-solid fa-plus"></i> 全部展開</button> <!-- 文字修改 -->
+            <button id="collapse-all-button" title="收合目前領域"><i class="fa-solid fa-minus"></i> 全部收合</button> <!-- 文字修改 -->
         </div>
         <!-- ------------------- -->
+
+        <!-- ===== NEW: Pagination Controls ===== -->
+        <div id="pagination-controls" style="display: none;"> <!-- 初始隱藏 -->
+             <button id="prev-area-button" title="上一個領域">&laquo; 上一領域</button>
+             <span id="current-area-info"></span>
+             <select id="area-select" title="跳轉到指定領域"></select> <!-- 跳轉下拉選單 -->
+             <button id="next-area-button" title="下一個領域">下一領域 &raquo;</button>
+        </div>
+        <!-- ==================================== -->
+
 
         <div id="questionnaire">
             <p>正在載入問卷題目...</p>
@@ -69,7 +83,7 @@
                 <span id="loading-indicator" class="loader" style="display: none;"></span>
             </button>
             <button id="export-csv-button">匯出結果 (CSV)</button>
-            <input type="file" id="import-csv-input" accept=".csv" style="display: none;">
+            <input type="file" id="import-csv-input" accept=".csv, application/vnd.ms-excel" style="display: none;"> <!-- 允許 .csv 和 Excel 識別的 MIME 類型 -->
             <button id="import-csv-button">匯入結果 (CSV)</button>
             <button id="clear-button" class="danger">清除所有暫存答案</button>
         </div>
@@ -110,7 +124,7 @@
     <!-- ===== 免責聲明與聯絡資訊區域 ===== -->
     <footer>
         <p class="disclaimer">
-            <strong>免責聲明：</strong> 本評估工具僅供初步自我評估參考，其結果不構成任何形式的法律或專業建議。 本工具不會主動蒐集、儲存或傳輸您的任何可識別個人身份資訊至伺服器。 您的評估答案僅暫存於您自己的瀏覽器本機儲存空間中 (localStorage)，不會上傳。 請使用者自行確保評估結果的適當應用與資訊安全。
+            <strong>免責聲明：</strong> 本評估工具僅供初步自我評估參考，其結果不構成任何形式的法律或專業建議。本工具不保證所有說明內容的準確性與完整性。 本工具不會主動蒐集、儲存或傳輸您的任何可識別個人身份資訊至伺服器。 您的評估答案僅暫存於您自己的瀏覽器本機儲存空間中，不會上傳。 請使用者自行確保評估結果的適當應用與資訊安全。
         </p>
         <hr style="max-width: 600px; margin: 15px auto; border-top: 1px solid #e0e0e0;"> <!-- 分隔線 -->
         <p class="contact-info">
@@ -127,3 +141,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+<!-- --- END OF FILE index.html --- -->
